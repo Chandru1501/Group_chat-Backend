@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const sequelize = require('../utills/database');
 const users = require('../model/user');
+let jwt = require('jsonwebtoken');
 
 
 
@@ -15,7 +16,7 @@ exports.signup = async (req,res,next)=>{
   console.log(req.body.Email);
   let user = await users.findOne( { where : { Email:EmaiL } } );
   console.log("user",user);
-  if(user[0]==null || user==="" || user===undefined){
+  if(user==null || user==="" || user===undefined){
       let salt = 10;
       bcrypt.hash(Password,salt,async(err,hashed)=>{
          if(err){
@@ -32,6 +33,7 @@ exports.signup = async (req,res,next)=>{
                 },{ transaction : t })
                 .then(async (response)=>{
                  await t.commit();
+                 console.log('new user update successfull')
                     res.status(200).json({"message" : "success"})
                 })
                 .catch(async(err)=>{
@@ -48,7 +50,7 @@ exports.signup = async (req,res,next)=>{
   }
      }
      catch(err){
-      //  await t.rollback();
+       await t.rollback();
         console.log(err);
         res.status(400).json({"message" : "somthing went wrong"})
      }
@@ -77,7 +79,16 @@ exports.login = async (req,res,next)=>{
          else{
             if(result===true){
                 console.log('password matched')
-                res.status(200).json({"message" : "login successfull"})
+                let id = user[0].Id;
+                let name = user[0].Username;
+                console.log( 'userrneme ', name)
+               let token = generateAccessToken(id,name);
+               console.log(token);
+                res.status(200).json({"message" : "login successfull" , "Token" : token})
+
+                function generateAccessToken(Id,Name){
+                 return jwt.sign({Id : Id , Name : Name},process.env.JWT_TOKEN_SECRECT)
+                }
             }
             else{
                console.log('password not matched')
@@ -91,6 +102,6 @@ exports.login = async (req,res,next)=>{
 }
 catch(err){
    console.log(err);
-   res.status(402).json({"message" : "something wrong"})
+   res.status(404).json({"message" : "something wrong"})
 }
 }

@@ -20,7 +20,7 @@ const user = sequelize.define('users',{
         primaryKey : true
     },
     Phone : {
-        type : Sequelize.INTEGER,
+        type : Sequelize.STRING,
         allowNull : false
     },
     Password : {

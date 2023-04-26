@@ -81,7 +81,7 @@ exports.login = async (req,res,next)=>{
             }
             else{
                console.log('password not matched')
-               res.status(400).json({"message" : "incorrect password"})
+               res.status(401).json({"message" : "incorrect password"})
 
             }
           }

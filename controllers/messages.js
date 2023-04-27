@@ -15,9 +15,27 @@ exports.SendMessage = async (req,res,next)=>{
     let send = await user[0].createMessage({
         Message : reqUserMessage
     })
+    res.status(200).json({'message' : 'message sent'})
  }
  catch(err){
     console.log(err);
     res.status(400).json({'message' : 'something went wrong'})
  }
+}
+
+exports.getMessages = async (req,res,next)=>{
+  console.log(req.user);
+  let Allmessages = await Messages.findAll({
+    include : [ {
+        model : Users,
+        attributes: [
+            [Sequelize.literal('user.Username'), 'Username']
+          ],
+          as: 'user'
+  }],
+  attributes: ['Id', 'Message', 'createdAt', 'userId'],
+//   raw : true
+  })
+  console.log(Allmessages)
+  res.status(202).json( { 'Usermessages' : Allmessages } )
 }

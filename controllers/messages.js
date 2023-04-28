@@ -1,6 +1,7 @@
 const Sequelize = require('sequelize');
 const Users = require('../model/user');
 const Messages = require('../model/messages');
+const Op = Sequelize.Op;
 
 exports.SendMessage = async (req,res,next)=>{
     try{
@@ -24,18 +25,27 @@ exports.SendMessage = async (req,res,next)=>{
 }
 
 exports.getMessages = async (req,res,next)=>{
+  let lastmessage = req.params.lastmessage;
+  lastmessage = Number(lastmessage.substring(1,lastmessage.length))
+
+  console.log("my last message ID ",lastmessage);
   console.log(req.user);
-  let Allmessages = await Messages.findAll({
-    include : [ {
-        model : Users,
-        attributes: [
-            [Sequelize.literal('user.Username'), 'Username']
-          ],
-          as: 'user'
-  }],
-  attributes: ['Id', 'Message', 'createdAt', 'userId'],
-//   raw : true
-  })
-  console.log(Allmessages)
+  const Allmessages = await Messages.findAll({
+    where: {
+      id: {
+        [Op.gt]: lastmessage
+      }
+    },
+    include: [
+      {
+        model: Users,
+        attributes: [['Username', 'Username']],
+        as: 'user'
+      }
+    ],
+    attributes: ['id', 'Message', 'createdAt', 'userId']
+  });
+  
+  // console.log(Allmessages);
   res.status(202).json( { 'Usermessages' : Allmessages } )
 }

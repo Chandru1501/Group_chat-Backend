@@ -7,7 +7,7 @@ const Authorization = require('../middleware/authendication');
 
 router.post('/sendmessage',Authorization.Authendicate,MessageController.SendMessage);
 
-router.get('/getmessages',Authorization.Authendicate,MessageController.getMessages);
+router.get('/getmessages/:lastmessage',Authorization.Authendicate,MessageController.getMessages);
 
 
 module.exports = router;

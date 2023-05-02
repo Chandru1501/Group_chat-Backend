@@ -6,9 +6,12 @@ const cors = require('cors');
 const bodyParser = require('body-parser');
 const UserRoutes = require('./routes/user');
 const MessageRoutes = require('./routes/messages');
+const groupRoutes = require('./routes/group');
 const sequelize = require('./utills/database');
 const users = require('./model/user');
 const messages = require('./model/messages');
+const group = require('./model/group');
+const user = require('./model/user');
 
 app.use(bodyParser.json());
 app.use(cors({
@@ -19,10 +22,15 @@ app.use(cors({
 
 app.use('/user',UserRoutes);
 app.use('/messages',MessageRoutes);
+app.use('/group',groupRoutes);
 
-users.hasMany(messages);
+
+group.belongsToMany(users, { through: 'GroupUsers' });
+users.belongsToMany(group, { through: 'GroupUsers' });
+
+messages.belongsTo(group);
 messages.belongsTo(users);
-
+group.hasMany(messages);
 
 // sequelize.sync({force : true})
 sequelize.sync()

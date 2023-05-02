@@ -84,7 +84,7 @@ exports.login = async (req,res,next)=>{
                 console.log( 'userrneme ', name)
                let token = generateAccessToken(id,name);
                console.log(token);
-                res.status(200).json({"message" : "login successfull" , "Token" : token , "Username" : name })
+                res.status(200).json({"message" : "login successfull" , "Token" : token ,"Username" : name })
 
                 function generateAccessToken(Id,Name){
                  return jwt.sign({Id : Id , Name : Name},process.env.JWT_TOKEN_SECRECT)

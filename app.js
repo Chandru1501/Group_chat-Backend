@@ -11,7 +11,7 @@ const sequelize = require('./utills/database');
 const users = require('./model/user');
 const messages = require('./model/messages');
 const group = require('./model/group');
-const user = require('./model/user');
+const GroupUsers = require('./model/groupusers');
 
 app.use(bodyParser.json());
 app.use(cors({
@@ -25,8 +25,17 @@ app.use('/messages',MessageRoutes);
 app.use('/group',groupRoutes);
 
 
-group.belongsToMany(users, { through: 'GroupUsers' });
-users.belongsToMany(group, { through: 'GroupUsers' });
+group.belongsToMany(users, {
+    through: GroupUsers,
+    foreignKey: 'groupId'
+  });
+  users.belongsToMany(group, {
+    through: GroupUsers,
+    foreignKey: 'userId'
+  });
+
+GroupUsers.belongsTo(group);
+GroupUsers.belongsTo(users);
 
 messages.belongsTo(group);
 messages.belongsTo(users);

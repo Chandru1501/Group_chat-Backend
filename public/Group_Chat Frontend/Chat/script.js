@@ -6,7 +6,7 @@ let messagesCount=0;
 
 var selectedGroup;
 
-// const socket = io('http://localhost:8000')
+// const socket = io('https://groupchat.chandraprakash.tech')
 
 window.addEventListener('DOMContentLoaded',ShowwelcomeMessage);
 
@@ -27,7 +27,7 @@ let submitform = document.querySelector('#creategroupform');
 
 NewGroupBtn.addEventListener('click',async()=>{
   let token = localStorage.getItem('Token');
-  let response = await axios.get('http://localhost:8000/group/getallmembers',{ headers : {'authorization' : token} })
+  let response = await axios.get('https://groupchat.chandraprakash.tech/group/getallmembers',{ headers : {'authorization' : token} })
   let Allusers = response.data.Allusers
   console.log(Allusers);
 
@@ -99,7 +99,7 @@ let NewgroupObj = {
   
   let token = localStorage.getItem('Token');
   
-  let response = await axios.post('http://localhost:8000/group/creategroup',NewgroupObj,{ headers : { "authorization" : token } });
+  let response = await axios.post('https://groupchat.chandraprakash.tech/group/creategroup',NewgroupObj,{ headers : { "authorization" : token } });
   console.log(response);
   if(response.data.message==='successfully created'){
     alert('New Group created successfully');
@@ -136,7 +136,7 @@ let  grouprefreshCount = 0;
 async function getAllgroups(){
   if(grouprefreshCount!=1){
     let token = localStorage.getItem('Token');
-    let response = await axios.get('http://localhost:8000/group/getallgroups',{headers : {"authorization" : token }})
+    let response = await axios.get('https://groupchat.chandraprakash.tech/group/getallgroups',{headers : {"authorization" : token }})
     console.log(response);
     let Allgroups = response.data.Allgroups;
     localStorage.setItem('Allgroups',JSON.stringify(Allgroups));
@@ -283,7 +283,7 @@ var groupId;
 async function getmessagesApi(myGroupId,lastmessageId){
 try{
   let token = localStorage.getItem('Token');
-  let response = await axios.get(`http://localhost:8000/group/getgroupmessages/${lastmessageId}`,{ 
+  let response = await axios.get(`https://groupchat.chandraprakash.tech/group/getgroupmessages/${lastmessageId}`,{ 
     headers : {  
        'authorization' : token,
        'groupId' : myGroupId
@@ -338,7 +338,7 @@ async function sendMessageToApi(message){
 var count=0;
 
    console.log(obj);
-  // let response = await axios.post('http://localhost:8000/messages/sendmessage',obj,{ headers : { "authorization" : token } });
+  // let response = await axios.post('https://groupchat.chandraprakash.tech/messages/sendmessage',obj,{ headers : { "authorization" : token } });
    document.querySelector('#Entermessage').value = "";
    let localchat = localStorage.getItem(groupname);
    if(!localchat){
@@ -570,7 +570,7 @@ let infoBtn = document.querySelector('#groupinfobtn');
 var totalusers;
 infoBtn.addEventListener('click',async()=>{
   let token = localStorage.getItem('Token');
-  let response = await axios.get('http://localhost:8000/group/getallmembers',{ headers : {'authorization' : token} })
+  let response = await axios.get('https://groupchat.chandraprakash.tech/group/getallmembers',{ headers : {'authorization' : token} })
   let Allusers = response.data.Allusers
   totalusers = Allusers;
   console.log(Allusers);
@@ -616,7 +616,7 @@ async function getAllgroupmembers(){
 
   console.log("groupId "+thisgroupId);
 
-  let response = await axios.get(`http://localhost:8000/group/getgroupmembers/${thisgroupId}`,{headers : {'authorization' : token }});
+  let response = await axios.get(`https://groupchat.chandraprakash.tech/group/getgroupmembers/${thisgroupId}`,{headers : {'authorization' : token }});
   console.log(response);
   GroupMembers = response.data.groupmembers;
   displaymembers(response.data.groupmembers);
@@ -692,7 +692,7 @@ async function displaymembers(groupmembers){
             console.log(member);
           
             var token = localStorage.getItem('Token');
-            let response = await axios.post('http://localhost:8000/group/removemember',member,{ headers : {'authorization' : token,"clarification" : button.textContent} });
+            let response = await axios.post('https://groupchat.chandraprakash.tech/group/removemember',member,{ headers : {'authorization' : token,"clarification" : button.textContent} });
             console.log(response);
             alert(response.data.message);
             if(response.data.message==='User removed from this group successfully' || response.data.message==='Exited from this group successfully'){
@@ -712,7 +712,7 @@ async function displaymembers(groupmembers){
         let token = localStorage.getItem('Token');
 
         if(confirm('Are you sure ?')){
-          let response = await axios.post('http://localhost:8000/group/makeasadmin',member,{headers : {'authorization' : token}});
+          let response = await axios.post('https://groupchat.chandraprakash.tech/group/makeasadmin',member,{headers : {'authorization' : token}});
           console.log(response); 
           alert(response.data.message);
           if(response.data.message==='Marked as admin successfully'){
@@ -789,7 +789,7 @@ async function addextraMember(e){
     }
     else{
       let token = localStorage.getItem('Token');
-      let response = await axios.post('http://localhost:8000/group/addmembers',selectedValuesaddedwithId,{headers : {'authorization' : token }});
+      let response = await axios.post('https://groupchat.chandraprakash.tech/group/addmembers',selectedValuesaddedwithId,{headers : {'authorization' : token }});
       console.log(response);
       alert(response.data.message);
       if(response.data.message==='user successfully added'){
@@ -821,7 +821,7 @@ deletegroupBtn.addEventListener('click',async()=>{
         }
       })
       let token = localStorage.getItem('Token');
-      let response = await axios.get(`http://localhost:8000/group/deletegroup/${groupId}`,{headers : {'authorization' : token}});
+      let response = await axios.get(`https://groupchat.chandraprakash.tech/group/deletegroup/${groupId}`,{headers : {'authorization' : token}});
       console.log(response); 
       alert(response.data.message);
       if(response.data.message==='group deleted succesfully'){
@@ -884,7 +884,7 @@ async function uploadFile(e){
          groupId = group.id;
       }
     })
-    let response = await axios.post('http://localhost:8000/messages/sendfile',formData,{headers : {"authorization" : token , "groupId" : groupId }});
+    let response = await axios.post('https://groupchat.chandraprakash.tech/messages/sendfile',formData,{headers : {"authorization" : token , "groupId" : groupId }});
     console.log(response);
     if(response){
       sendfileform.style.display='none';

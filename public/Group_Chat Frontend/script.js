@@ -51,7 +51,7 @@ async function signup (event) {
 
 async function postUser(myobj){
     try{
-    let response = await axios.post('http://localhost:8000/user/signup',myobj);
+    let response = await axios.post('https://groupchat.chandraprakash.tech/user/signup',myobj);
     console.log(response);
     return response
     }
@@ -108,7 +108,7 @@ if(page==="Login")  {
 
   async function loginApi(obj){
     try{
-        let response = await axios.post('http://localhost:8000/user/login',obj)
+        let response = await axios.post('https://groupchat.chandraprakash.tech/user/login',obj)
         return response;
     }
     catch(err){
@@ -148,7 +148,7 @@ if(page==='Forgot Password'){
 
     async function ResetApi(Email){
         try{
-            let response = await axios.post('http://localhost:8000/password/forgotpassword',Email);
+            let response = await axios.post('https://groupchat.chandraprakash.tech/password/forgotpassword',Email);
             console.log(response);
             return response.data.message;
         }

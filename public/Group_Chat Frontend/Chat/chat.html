@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" integrity="sha512-..." crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" /> 
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <title>Group Chat</title>
+</head>
+<body id="body">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.3.1/socket.io.js"></script>
+    <nav id="mainnav">
+        <h2>GROUP CHAT</h2>
+        <a id="logout" href="../login.html">Logout</a>
+    </nav>
+
+    <div id="newGroupform">
+        <h2>Create Group</h2>
+        <button id="closeform" class="">X</button>
+    <form id="creategroupform" action="POST">
+        <input type="text" id="groupnameinput" name="Groupname" placeholder="Enter New Group name" required ><br>
+        <h6 id="labelfor" for="select">Select Group Members</h6>
+        <select id="totalusers" class="selectpicker" multiple data-live-search="true">
+          </select><br>
+          <button id="creategroupbtn">Create Group</button>
+    </form>
+</div>
+<div id="groupinfopage">
+   <nav id="groupinfohead">
+       <h3>Group Participants</h3>
+       <button class="btn btn-warning" id="addmembersbtn">Add members</button>
+       <button id="infopageclose">X</button>
+   </nav>
+   <table id="memberslist">
+   </table>
+</div>
+<div id="addmemberspage">
+    <form id="addmembersform" method="POST">
+        <select id="selectmember" class="selectpicker" multiple data-live-search="true">
+        </select><br>
+            <button class="btn btn-info" id="addmembersbutton">Add</button>
+    </form>
+</div>
+
+    <div id="listofgroups">
+            <nav id="groupsHead">
+                <h2>Grouplist</h2>
+                <button id="newgroupbtn" class="btn btn-success">New Group</button>
+                <button id="refreshgroup" class="btn btn-warning">Refresh</button>
+            </nav>
+           <div id="groups">
+          <ul id="grouplist" >
+          </ul>
+        </div>
+        </div>
+        <div id="chattingTerminal">
+            <nav  id="messages">
+                <h2 class="groupname">Group chat</h2>
+                <button id="groupinfobtn" class="btn btn-info">Info</button>
+                <button id="deletegroupbtn" class="btn btn-danger">Delete Group</button>
+            </nav>    
+            <ul id="messagelist">
+            </ul>
+        </div>
+        <form action="POST" id="textform">
+            <div id="chatingbox">
+                <div id="typing">
+                    <input type="text" id="Entermessage" name="userMessage" placeholder=" Type message..." required>
+                    <i id="clip" class="fas fa-paperclip"></i>
+                    <button id="sendbtn" class="btn btn-success">Send</button>
+                </div>
+            </div>
+        </form>
+        <form id="fileform" style="display: none;" method="POST" enctype="multipart/form-data">
+            <div id="sendfileform">
+                <input type="file" name="file" id="fileinput" required>
+                <button class="btn btn-info" id="sendfilebtn">Send File</button>
+            </div>
+        </form>
+        <h3 id="pleasewait">PLEASE WAIT...</h3>
+        <script type="module" src="script.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+        <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.bundle.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <script defer src="http://localhost:8000/socket.io/socket.io.js"></script>
+            
+    </body>
+</html>

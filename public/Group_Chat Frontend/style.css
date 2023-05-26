@@ -1,0 +1,138 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto+Slab:wght@300;400&display=swap');
+
+
+body{
+    font-family: 'Roboto Slab', serif;
+    background-color: rgb(2, 8, 24);
+}
+nav{
+    border: 2px solid;
+    background-color: rgb(15, 204, 252);
+    height: 70px;
+}
+
+.form-control{
+  border-radius: 7px;
+  width: 200px;
+  margin-top: -20px;
+  margin-left: 44px;  
+  width: min-content; 
+  border-color: black; 
+  height: 35px;
+}
+
+
+#box{
+    border: 2px solid;
+    width: 350px;
+    height: 350px;
+    border-radius: 40px;
+    margin-top: 40px;
+    background-color: rgb(238, 228, 228);
+    /* box-shadow: 2px,2px,5px,5px rgba(0,0,0,0.1); */
+}
+
+#already{
+    margin-top: 4px;
+    text-align: center;
+}
+h2{
+    text-align: center;
+    margin-bottom: 30px;
+}
+button{
+    margin-left: 35%;
+    margin-top: -15px;
+}
+input{
+    margin-left: 20%;
+}
+#navTitle{
+    color: rgb(0, 0, 0);
+    text-align: center;
+    margin-top: 15px;
+}
+#mismatch{
+    font-size: 1.1rem;
+    margin-top: -20px;
+    text-align: center;
+    display: none;
+}
+#exist{
+    font-size: 1.1rem;
+    margin-top: -20px;
+    text-align: center;
+    display: none;
+}
+ #wrongpassword{
+    text-align: center;
+    margin-top: -15px;
+    margin-bottom: 18px;
+    font-size: 1.1rem;
+    display: none;
+}
+#usernotfound{
+    text-align: center;
+    margin-top: -15px;
+    font-size: 1.1rem;
+    display: none;
+}
+#forgotpassword{
+    margin-top: -20px;
+    float:right;
+    margin-right: 5px;
+}
+
+
+
+
+
+
+@media screen and (max-width: 480px) {
+    /* Adjust styles for small screens */
+    body {
+        font-family: 'Roboto Slab', serif;
+        font-size: 15px;
+    }
+    
+    /* Adjust layout for small screens */
+    .form-control{
+        width: 200px;
+        margin-left: 20px;
+    }
+    
+    #navTitle{
+        /* border: 2px solid; */
+        text-align: center;
+        margin-top: 13px;
+        /* background-color: aquamarine;  */
+    }
+    #box {
+      width: 70%;
+      padding: 10px;
+      margin-top: 10%;
+      height: 350px;
+    }
+    button{
+        margin-left: 31%;
+    }
+    input::placeholder {
+        padding-left: 10px;
+      }
+      #exist{
+        font-size: 0.9rem;
+        margin-top: -20px;
+        display: none;
+        text-align: center;
+    }
+    #wrongpassword{
+        text-align: center;
+        margin-top: -15px;
+        font-size: .9rem;
+    }
+    #usernotfound{
+        text-align: center;
+        margin-top: -15px;
+        font-size: .9rem;
+    }
+  }

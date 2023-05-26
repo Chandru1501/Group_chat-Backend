@@ -65,7 +65,7 @@ app.use(bodyParser.json());
 app.use(express.urlencoded({extended : 'false'}));
 
 app.use(cors({
-    // origin : ["http://localhost:8000"]
+    origin : ["groupchat.chandraprakash.tech"]
 })
 );
 
@@ -97,7 +97,13 @@ forgotpassword.belongsTo(users);
 
 app.use('/',(req,res)=>{
   console.log(req.url);
-  res.sendFile(path.join(__dirname,`public/Group_Chat Frontend${req.url}`));
+  if(req.url=='/'){
+    console.log('base page')
+    res.sendFile(path.join(__dirname,'public/Group_Chat Frontend/index.html'));
+  }
+  else{
+    res.sendFile(path.join(__dirname,`public/Group_Chat Frontend${req.url}`));
+  }
 })
 
 
@@ -105,7 +111,7 @@ app.use('/',(req,res)=>{
 // sequelize.sync({force : true})
 sequelize.sync()
 .then((response)=>{
-    server.listen(8000);
-    console.log('server is running on port 8000')
+    server.listen(80);
+    console.log('server is running on port 80')
 })
 .catch(err=>console.log(err));

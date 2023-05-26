@@ -7,15 +7,65 @@ const bodyParser = require('body-parser');
 const UserRoutes = require('./routes/user');
 const MessageRoutes = require('./routes/messages');
 const groupRoutes = require('./routes/group');
+const passwordRoutes = require('./routes/password');
 const sequelize = require('./utills/database');
 const users = require('./model/user');
 const messages = require('./model/messages');
 const group = require('./model/group');
 const GroupUsers = require('./model/groupusers');
+const forgotpassword = require('./model/forgotpassword');
+const path = require('path');
+const http = require('http');
+const authendication = require('./middleware/authendication');
+const messageController = require('./controllers/messages');
+var multer = require('multer');
+var upload = multer();
+
+const server = require('http').Server(app);
+const io = require('socket.io')(server);
+
+io.on('connection', async (socket) => {
+  console.log('a user connected');
+  console.log (socket.id);
+
+  socket.on('send-message',async (msg,auth,groupname) => {
+  let user = await authendication.AuthendicateIO(auth);
+  console.log(user);
+  console.log(groupname);
+  console.log(msg);
+
+  let response = await messageController.SendMessage(user,msg);
+  if(response){
+    io.to(socket.id).emit("response-to-user",response.message);
+    io.to(groupname).emit("receive-message",response.message);
+  }
+
+  });
+
+  socket.on('someone-sent-a-file',(filelink,grouptitle)=>{
+    console.log(filelink);
+    io.to(grouptitle).emit('receive-a-file',filelink);
+  })
+   
+  socket.on('group-opened',(groupname)=>{
+     console.log(groupname);
+      socket.join(groupname);
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected');
+  });
+
+});
+
+app.use(express.static(path.join(__dirname,'public')));
 
 app.use(bodyParser.json());
+
+app.use(express.urlencoded({extended : 'false'}));
+
 app.use(cors({
-    // origin : "http://127.0.0.1:5500"
+    // origin : ["http://localhost:8000"]
 })
 );
 
@@ -23,6 +73,7 @@ app.use(cors({
 app.use('/user',UserRoutes);
 app.use('/messages',MessageRoutes);
 app.use('/group',groupRoutes);
+app.use('/password',passwordRoutes);
 
 
 group.belongsToMany(users, {
@@ -41,10 +92,20 @@ messages.belongsTo(group);
 messages.belongsTo(users);
 group.hasMany(messages);
 
+forgotpassword.belongsTo(users);
+
+
+app.use('/',(req,res)=>{
+  console.log(req.url);
+  res.sendFile(path.join(__dirname,`public/Group_Chat Frontend${req.url}`));
+})
+
+
+
 // sequelize.sync({force : true})
 sequelize.sync()
 .then((response)=>{
-    // console.log(response);
-    app.listen(8000);
+    server.listen(8000);
+    console.log('server is running on port 8000')
 })
 .catch(err=>console.log(err));

@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/Group_Chat Frontend/style.css">
+    <title>Reset Password</title>
+    <style>
+        #box{
+            height: 250px;   
+         }
+        #resetbtn{
+        margin-left: 28%;
+        margin-top: -19px;
+        }
+        #page{
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <h2 class="container" id="navTitle">GROUP CHAT</h2>
+    </nav>
+    <div class="container" id="box">
+        <h2 id="page">Reset Password</h2>
+        <form onsubmit="resetPassword(e)" method="POST">
+          <input type="email" name="Email" id="resetemail" placeholder="Enter your Email" class="form-control" required><br>
+          <input type="password" name="Email" id="password" placeholder="Enter Password" class="form-control" required><br>
+          <input type="password" name="Email" id="confirmpassword" placeholder="Confirm Password" class="form-control" required><br>
+          <p id="usernotfound" class="text-danger">User Not Found</p>
+          <p id="mismatch" class="text-danger">Password Mismatch</p>
+          <button id="resetbtn" class="btn btn-success">Reset Password</button>
+        </form>
+   <script>
+      let form = document.querySelector('form');
+      form.onsubmit = resetPassword;
+      let url = location.href.split('/');
+      let uuid = url[5];
+      console.log(url[5]);
+      async function resetPassword(e){
+        e.preventDefault();
+
+        let email = document.querySelector('#resetemail').value;
+        let confirmPw = document.querySelector('#confirmpassword').value;
+        let password = document.querySelector('#password').value;
+        let notfound = document.querySelector('#usernotfound');
+        let mismatch = document.querySelector('#mismatch');
+        mismatch.style.display='none';
+        notfound.style.display='none';
+        if(confirmPw===password){
+            let obj = {
+                Email : email,
+                newPassword : password,
+                uuid : uuid
+            }
+           let response = await resetapi(obj);
+           console.log(response);
+           if(response==='user not found'){
+            mismatch.style.display='none';
+            notfound.style.display='block';
+           }
+           else if(response==='password updated successfully'){
+            alert(response);
+            location.reload();
+           }
+           else{
+            alert(response);
+           }
+            console.log(obj);   
+        }
+        else{
+            mismatch.style.display='block';
+        }
+      }
+
+      async function resetapi(obj){
+        try{
+            let response = await axios.post('http://localhost:8000/password/reset-my-password',obj);
+                console.log(response);
+                return response.data.message
+        }
+        catch(err){
+                console.log(err);
+                return err.response.data.message;
+        }
+      }
+   </script> 
+   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</body>
+</html>

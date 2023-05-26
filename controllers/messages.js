@@ -1,7 +1,15 @@
+require('dotenv').config();
 const Sequelize = require('sequelize');
 const messages = require('../model/messages');
 const Groupusers = require('../model/groupusers');
 const Op = Sequelize.Op;
+const fs = require('fs');
+const path = require('path');
+const multer = require('multer');
+const upload = multer({ dest: 'uploads/' });
+const AWS = require('aws-sdk');
+const multer_S3 = require('multer-s3'); 
+const user = require('../model/user');
 
 exports.SendMessage = async (userDetails,userMessage)=>{
   try{
@@ -37,4 +45,60 @@ catch(err){
   console.log(err);
   return 'something went wrong';
 }
+}
+
+exports.SendFile  = async (req,res,next)=>{
+  try{
+    let file = await req.result;
+    let fileLink  =  file.Location;
+    let userId = req.user.Id;
+    let groupId = req.headers.groupid;
+  
+    console.log(file);
+    console.log(userId);
+    console.log(groupId);
+  
+    let User = await user.findAll({where : {Id : userId}});
+  
+    if(User){
+      let message = await messages.create({
+        Message : fileLink,
+        groupId : groupId,
+        userId : userId
+      }); 
+      if(message){
+        console.log(message);
+        let messageId = message.Id
+        let messageWithusername = await messages.findAll({ 
+          where : {
+           groupId : groupId,
+           Id : messageId
+          }, include: [
+           {
+             model: user,
+             attributes: ['Username'],
+           }
+         ],
+       },
+       )
+       if(messageWithusername){
+        console.log(messageWithusername);
+         res.status(200).json({'message' : 'uploaded successfully' , "file" : messageWithusername});
+       }
+      } 
+      else{
+        res.status(400).json({'message' : 'some error occured'});
+      } 
+    }
+    else{
+      res.status(400).json({'message' : 'user not found'});
+    }
+
+  }
+  catch(err){
+    console.log(err);
+    res.status(400).json({'message' : 'some error occured'});
+  }
+
+  
 }

@@ -97,7 +97,13 @@ forgotpassword.belongsTo(users);
 
 app.use('/',(req,res)=>{
   console.log(req.url);
-  res.sendFile(path.join(__dirname,`public/Group_Chat Frontend${req.url}`));
+  if(req.url=='/'){
+    console.log('base page')
+    res.sendFile(path.join(__dirname,'public/Group_Chat Frontend/login.html'));
+  }
+  else{
+    res.sendFile(path.join(__dirname,`public/Group_Chat Frontend${req.url}`));
+  }
 })
 
 

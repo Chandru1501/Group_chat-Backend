@@ -57,48 +57,55 @@ exports.SendFile  = async (req,res,next)=>{
     console.log(file);
     console.log(userId);
     console.log(groupId);
-  
-    let User = await user.findAll({where : {Id : userId}});
-  
-    if(User){
-      let message = await messages.create({
-        Message : fileLink,
-        groupId : groupId,
-        userId : userId
-      }); 
-      if(message){
-        console.log(message);
-        let messageId = message.Id
-        let messageWithusername = await messages.findAll({ 
-          where : {
-           groupId : groupId,
-           Id : messageId
-          }, include: [
-           {
-             model: user,
-             attributes: ['Username'],
-           }
-         ],
-       },
-       )
-       if(messageWithusername){
-        console.log(messageWithusername);
-         res.status(200).json({'message' : 'uploaded successfully' , "file" : messageWithusername});
-       }
-      } 
+
+    if(file!='You are not member of this group to send file or message please ask admin to add you !!'){
+
+      let User = await user.findAll({where : {Id : userId}});
+    
+      if(User){
+        let message = await messages.create({
+          Message : fileLink,
+          groupId : groupId,
+          userId : userId
+        }); 
+        if(message){
+          console.log(message);
+          let messageId = message.Id
+          let messageWithusername = await messages.findAll({ 
+            where : {
+             groupId : groupId,
+             Id : messageId
+            }, include: [
+             {
+               model: user,
+               attributes: ['Username'],
+             }
+           ],
+         },
+         )
+         if(messageWithusername){
+          console.log(messageWithusername);
+           res.status(200).json({'message' : 'uploaded successfully' , "file" : messageWithusername});
+         }
+        } 
+        else{
+          res.status(400).json({'message' : 'some error occured'});
+        } 
+      }
       else{
-        res.status(400).json({'message' : 'some error occured'});
-      } 
+        res.status(400).json({'message' : 'user not found'});
+      }
+
     }
     else{
-      res.status(400).json({'message' : 'user not found'});
+      res.status(400).json({"message" : file});
     }
+  
 
   }
   catch(err){
     console.log(err);
     res.status(400).json({'message' : 'some error occured'});
   }
-
   
 }

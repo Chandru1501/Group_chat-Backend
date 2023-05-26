@@ -39,7 +39,7 @@ async function signup (event) {
         }
         if(res.data.message==='success'){
             alert("Signup Successfull please Login to continue")
-            location.replace('./login.html');
+            location.replace('./index.html');
         }
         if(res.data.message==='user exists'){
             exists.style.display="block";

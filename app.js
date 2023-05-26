@@ -36,8 +36,14 @@ io.on('connection', async (socket) => {
 
   let response = await messageController.SendMessage(user,msg);
   if(response){
-    io.to(socket.id).emit("response-to-user",response.message);
-    io.to(groupname).emit("receive-message",response.message);
+    console.log(response);
+    let message = response.message;
+    console.log(message);
+    if(message===undefined){
+      message=response;
+    }
+    io.to(socket.id).emit("response-to-user",message);
+    io.to(groupname).emit("receive-message",message);
   }
 
   });
